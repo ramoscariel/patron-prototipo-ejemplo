@@ -22,7 +22,14 @@ namespace patron_prototipo_ejemplo
     		builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton<WeatherForecastService>();
+            // Set path to the SQLite database (it will be created if it does not exist)
+            var dbPath =
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    @"Figures.db");
+            // Register Service and the SQLite database
+            builder.Services.AddSingleton<FiguresService>(
+                s => ActivatorUtilities.CreateInstance<FiguresService>(s, dbPath));
 
             return builder.Build();
         }
